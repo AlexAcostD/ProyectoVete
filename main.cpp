@@ -111,11 +111,9 @@ ComprobantePago comprobante =
         "Consulta medica + vacuna",
         85.50
     );
-
 if(comprobante.montoTotal > 0)
 {
     cout << "\nComprobante emitido\n";
-
     cout << "Numero: "
          << comprobante.numeroComprobante
          << endl;
@@ -136,7 +134,5 @@ else
 {
     cout << "\nError al emitir comprobante\n";
 }
-
-
     return 0;
 }
