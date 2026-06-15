@@ -1,0 +1,16 @@
+# Archivos de datos
+*.dat
+
+# Ejecutables
+*.exe
+main
+
+# Archivos temporales
+*.tmp
+
+# Carpetas de VS Code
+.vscode/
+
+# Archivos de compilación
+*.o
+*.obj
