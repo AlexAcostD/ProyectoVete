@@ -3,9 +3,7 @@
 
 int aplicarVacuna(
     const char codMascota[],
-    const char nombreVacuna[],
-    int edadMascota,
-    float pesoMascota
+    const char nombreVacuna[]
 );
 
 #endif

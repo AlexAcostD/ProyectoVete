@@ -43,10 +43,11 @@ void menuRegistrarPropietario(){
 
     if (registrarPropietario(&propietario,dni,nombres,direccion,telefono,correo)){
                     cout << "Propietario registrado." << endl;
+                        listarPropietarios();
     }else{
                     cout << "Error al registrar propietario." << endl;
     }
-    listarPropietarios();
+
 
 }
 
@@ -82,15 +83,36 @@ void menuRegistrarMascotas()
     cout << "Raza: ";
     cin.getline(raza, 50);
 
+do
+{
     cout << "Sexo (M/H): ";
     cin >> sexo;
+    sexo = toupper(sexo);
+    if (sexo != 'M' && sexo != 'H')
+    {
+        cout << "Error. Solo puede ingresar M o H.\n";}
+} while (sexo != 'M' && sexo != 'H');
 
+
+while (true)
+{
     cout << "Edad: ";
-    cin >> edad;
+    if (cin >> edad && edad >= 0)
+    { break;}
+    cout << "Error. Ingrese una edad valida.\n";
+    cin.clear();
+    cin.ignore(1000, '\n');
+}
 
+while (true)
+{
     cout << "Peso: ";
-    cin >> peso;
-
+    if (cin >> peso && peso > 0)
+    {break;}
+    cout << "Error. Ingrese un peso valido.\n";
+    cin.clear();
+    cin.ignore(1000, '\n');
+}
     cin.ignore();
 
     cout << "Color: ";
@@ -118,6 +140,7 @@ void menuRegistrarMascotas()
             dniProp))
     {
         cout << "\nMascota registrada correctamente.\n";
+         listarMascotas();
     }
     else
     {
@@ -126,7 +149,137 @@ void menuRegistrarMascotas()
     }
 
 
-    listarMascotas();
+}
+
+void menuRegistrarConsulta()
+{
+    RecetaMedica receta;
+    Consulta consulta;
+
+    char codMascota[10];
+    char codVeterinario[10];
+    char motivo[100];
+    char diagnostico[150];
+    char observaciones[150];
+
+    cout << "\n=== REGISTRAR CONSULTA MEDICA ===\n";
+
+    cout << "Codigo Mascota: ";
+    cin >> codMascota;
+
+    cout << "Codigo Veterinario: ";
+    cin >> codVeterinario;
+
+    cin.ignore();
+
+    cout << "Motivo: ";
+    cin.getline(motivo,100);
+
+    cout << "Diagnostico: ";
+    cin.getline(diagnostico,150);
+
+    cout << "\n=== RECETA ===\n";
+
+    cout << "Medicamento: ";
+    cin.getline(receta.medicamento,50);
+
+    cout << "Dosis: ";
+    cin.getline(receta.dosis,30);
+
+    cout << "Frecuencia: ";
+    cin.getline(receta.frecuencia,30);
+
+    cout << "Observaciones: ";
+    cin.getline(observaciones,150);
+
+    consulta = registrarConsultaMedica(
+        codMascota,
+        codVeterinario,
+        motivo,
+        diagnostico,
+        receta,
+        observaciones
+    );
+
+    cout << "\nConsulta registrada correctamente.\n";
+}
+
+void menuAplicarVacuna()
+{
+    char codigoMascota[10];
+    char nombreVacuna[30];
+
+    int edad;
+    float peso;
+
+    cout << "\n=== APLICAR VACUNA ===\n";
+
+    cout << "Codigo Mascota: ";
+    cin >> codigoMascota;
+
+    cin.ignore();
+
+    cout << "Nombre Vacuna: ";
+    cin.getline(nombreVacuna,30);
+
+
+
+    if(
+        aplicarVacuna(
+            codigoMascota,
+            nombreVacuna
+        )
+    )
+    {
+        cout << "\nVacuna aplicada correctamente.\n";
+    }
+    else
+    {
+        cout << "\nNo fue posible aplicar la vacuna.\n";
+    }
+}
+
+void menuEmitirComprobante()
+{
+    ComprobantePago comprobante;
+
+    char numero[20];
+    char dni[9];
+    char detalle[100];
+
+    float monto;
+
+    cout << "\n=== EMITIR COMPROBANTE ===\n";
+
+    cout << "Numero Comprobante: ";
+    cin >> numero;
+
+    cout << "DNI Cliente: ";
+    cin >> dni;
+
+    cin.ignore();
+
+    cout << "Detalle: ";
+    cin.getline(detalle,100);
+
+    cout << "Monto: ";
+    cin >> monto;
+
+    comprobante = emitirComprobante(
+        numero,
+        dni,
+        detalle,
+        monto
+    );
+
+    if(strlen(comprobante.numeroComprobante) == 0)
+    {
+        cout << "\nError al emitir comprobante.\n";
+    }
+    else
+    {
+        cout << "\nComprobante emitido correctamente.\n";
+    }
 }
 
 int main(){
@@ -152,10 +305,13 @@ int main(){
     {
         cout << "\n===== MENU PRINCIPAL =====" << endl;
         cout << "1. Registrar Propietario" << endl;
-        cout << "2. Registrar Mascota" << endl;
-        cout << "3. Registrar Consultas Medicas" << endl;
-        cout << "4. Registrar Vacuna" << endl;
-        cout << "5. Emitir Comprobante de Pago" << endl;
+        cout << "2. Listar Propietario" << endl;
+        cout << "3. Registrar Mascota" << endl;
+        cout << "4. Listar Mascota" << endl;
+        cout << "5. Registrar Consultas Medicas" << endl;
+        cout << "6. Registrar Vacuna" << endl;
+        cout << "7. Emitir Comprobante de Pago" << endl;
+
         cout << "0. Salir" << endl;
         cout << "Opcion: ";
         cin >> opcion;
@@ -163,31 +319,31 @@ int main(){
         switch (opcion)
         {
             case 1:
-            {
                 menuRegistrarPropietario(); 
                 break;
-            }
-
             case 2:
+                listarPropietarios();
+                break;
+            case 3:
                 menuRegistrarMascotas();
                 break;
-
-            case 3:
-                cout << "Registrar Consulta" << endl;
-                break;
-
             case 4:
-                cout << "Registrar Vacuna" << endl;
+                listarMascotas();
                 break;
-
             case 5:
-                cout << "Emitir Comprobante" << endl;
-                
-                
+                menuRegistrarConsulta();
                 break;
+            case 6:
+                menuAplicarVacuna();
+                break;
+            case 7:
+                menuEmitirComprobante();
+                break;
+            
             case 0:
                 cout << "Saliendo..." << endl;
                 break;
+
 
             default:
                 cout << "Opcion no valida." << endl;

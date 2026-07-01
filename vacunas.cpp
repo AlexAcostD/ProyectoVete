@@ -2,23 +2,54 @@
 #include <fstream>
 #include <cstring>
 #include <ctime>
-
+#include "mascotas.h"
 using namespace std;
-
-struct VacunaAplicada
+bool buscarMascota(const char codigo[], Mascota *mascota)
 {
-    char codigoMascota[10];
-    char nombreVacuna[30];
-    char fechaAplicacion[11];
-};
+    ifstream archivo("mascotas.dat", ios::binary);
+
+    if (!archivo)
+        return false;
+
+    Mascota aux;
+
+    while (archivo.read(reinterpret_cast<char*>(&aux), sizeof(Mascota)))
+    {
+        if (strcmp(aux.codigo, codigo) == 0)
+        {
+            *mascota = aux;
+            archivo.close();
+            return true;
+        }
+    }
+
+    archivo.close();
+    return false;
+}
 
 int aplicarVacuna(
     const char codMascota[],
-    const char nombreVacuna[],
-    int edadMascota,
-    float pesoMascota
+    const char nombreVacuna[]
 )
 {
+
+Mascota mascota;
+
+if (!buscarMascota(codMascota, &mascota))
+{
+    return 0;   // La mascota no existe
+}
+
+cout << "\n===== DATOS DE LA MASCOTA =====\n";
+cout << "Codigo : " << mascota.codigo << endl;
+cout << "Nombre : " << mascota.nombre << endl;
+cout << "Especie: " << mascota.especie << endl;
+cout << "Raza   : " << mascota.raza << endl;
+cout << "Edad   : " << mascota.edad << endl;
+cout << "Peso   : " << mascota.peso << endl;
+cout << "Color  : " << mascota.color << endl;
+cout << "===============================\n";
+
     bool vacunaValida = false;
 
     if (
@@ -35,17 +66,6 @@ int aplicarVacuna(
         return 0;
     }
 
-    // Edad mínima
-    if (edadMascota < 1)
-    {
-        return 0;
-    }
-
-    // Peso mínimo
-    if (pesoMascota < 1.0)
-    {
-        return 0;
-    }
 
     VacunaAplicada vacuna;
 

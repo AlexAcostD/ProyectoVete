@@ -1,11 +1,21 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-
+#include <cctype>
 #include "mascotas.h"
 #include "propietarios.h"
 
 using namespace std;
+
+bool soloNumeros(const char cadena[])
+{
+    for (int i = 0; cadena[i] != '\0'; i++)
+    {
+        if (!isdigit(cadena[i]))
+            return false;
+    }
+    return true;
+}
 
 bool existeMascota(const char codigo[])
 {
@@ -50,70 +60,59 @@ int registrarMascota(
     const char dniProp[]
 )
 {
-
     if (nuevaMascota == NULL)
-    {
         return 0;
-    }
 
+
+    if (strlen(codigo) == 0 || !soloNumeros(codigo))
+        return 0;
 
     if (existeMascota(codigo))
-    {
         return 0;
-    }
 
-   
-    if (!existePropietario(dniProp))
-    {
+
+    if (strlen(dniProp) != 8 || !soloNumeros(dniProp))
         return 0;
-    }
+
+    if (!existePropietario(dniProp))
+        return 0;
+
 
     if (sexo != 'M' && sexo != 'H')
-    {
         return 0;
-    }
 
 
-    if (edad < 0)
-    {
+    if (edad < 0 || edad > 40)
         return 0;
-    }
 
-  
-    if (peso <= 0)
-    {
+
+    if (peso <= 0 || peso > 150)
         return 0;
-    }
 
+    if (strlen(nombre) == 0 ||
+        strlen(especie) == 0 ||
+        strlen(raza) == 0 ||
+        strlen(color) == 0 ||
+        strlen(fechaNac) == 0)
+        return 0;
 
     strcpy(nuevaMascota->codigo, codigo);
     strcpy(nuevaMascota->nombre, nombre);
     strcpy(nuevaMascota->especie, especie);
     strcpy(nuevaMascota->raza, raza);
-
     nuevaMascota->sexo = sexo;
     nuevaMascota->edad = edad;
     nuevaMascota->peso = peso;
-
     strcpy(nuevaMascota->color, color);
     strcpy(nuevaMascota->fechaNacimiento, fechaNac);
     strcpy(nuevaMascota->dniPropietario, dniProp);
 
-    ofstream archivo(
-        "mascotas.dat",
-        ios::binary | ios::app
-    );
+    ofstream archivo("mascotas.dat", ios::binary | ios::app);
 
     if (!archivo)
-    {
         return 0;
-    }
 
-    archivo.write(
-        reinterpret_cast<char*>(nuevaMascota),
-        sizeof(Mascota)
-    );
-
+    archivo.write(reinterpret_cast<char*>(nuevaMascota), sizeof(Mascota));
     archivo.close();
 
     return 1;
