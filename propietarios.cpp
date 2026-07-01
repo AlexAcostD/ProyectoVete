@@ -9,11 +9,9 @@ using namespace std;
 bool existePropietario(const char dni[])
 {
     ifstream archivo("propietarios.dat", ios::binary);
-
     if (!archivo)
     {
-        return false;
-    }
+        return false;}
 
     Propietario propietario;
 
@@ -27,7 +25,6 @@ bool existePropietario(const char dni[])
             return true;
         }
     }
-
     archivo.close();
     return false;
 }
@@ -41,19 +38,16 @@ int registrarPropietario(
     const char correo[]
 )
 {
-    // Validar puntero
     if (nuevoPropietario == NULL)
     {
         return 0;
     }
 
-    // Validar longitud DNI
     if (strlen(dni) != 8)
     {
         return 0;
     }
 
-    // Validar que sean números
     for (int i = 0; i < 8; i++)
     {
         if (dni[i] < '0' || dni[i] > '9')
@@ -62,20 +56,18 @@ int registrarPropietario(
         }
     }
 
-    // Validar duplicado
     if (existePropietario(dni))
     {
         return 0;
     }
 
-    // Copiar datos a la estructura
     strcpy(nuevoPropietario->dni, dni);
     strcpy(nuevoPropietario->nombres, nombres);
     strcpy(nuevoPropietario->direccion, direccion);
     strcpy(nuevoPropietario->telefono, telefono);
     strcpy(nuevoPropietario->correo, correo);
 
-    // Persistir en archivo
+ 
     ofstream archivo(
         "propietarios.dat",
         ios::binary | ios::app
@@ -101,4 +93,35 @@ int registrarPropietario(
     archivo.close();
 
     return 1;
+}
+
+
+
+void listarPropietarios()
+{
+    ifstream archivo("propietarios.dat", ios::binary);
+
+    if (!archivo)
+    {
+        cout << "No existe el archivo de propietarios." << endl;
+        return;
+    }
+
+    Propietario propietario;
+
+    cout << "\n===== LISTA DE PROPIETARIOS =====\n" << endl;
+
+    while (archivo.read(
+        reinterpret_cast<char*>(&propietario),
+        sizeof(Propietario)))
+    {
+        cout << "DNI: " << propietario.dni << endl;
+        cout << "Nombres: " << propietario.nombres << endl;
+        cout << "Direccion: " << propietario.direccion << endl;
+        cout << "Telefono: " << propietario.telefono << endl;
+        cout << "Correo: " << propietario.correo << endl;
+        cout << "----------------------------------" << endl;
+    }
+
+    archivo.close();
 }

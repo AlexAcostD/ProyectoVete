@@ -18,5 +18,5 @@ int registrarMascota(
 );
 
 bool existeMascota(const char codigo[]);
-
+void listarMascotas();
 #endif

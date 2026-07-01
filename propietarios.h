@@ -13,5 +13,5 @@ int registrarPropietario(
 );
 
 bool existePropietario(const char dni[]);
-
+void listarPropietarios();
 #endif

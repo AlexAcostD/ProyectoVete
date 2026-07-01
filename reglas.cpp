@@ -24,8 +24,10 @@ void err(const char msg[]) { cout << "[ERROR] " << msg << "\n"; }
 // MAIN
 // ─────────────────────────────────────────────
 
-int main()
+bool validarReglasNegocio()
 {
+    bool todoCorrecto = true;
+
     separador("REGISTRO DE PROPIETARIOS");
     Propietario p1, p2;
 
@@ -294,5 +296,8 @@ int main()
     cout << "  4 comprobantes de pago emitidos.\n";
     cout << "  Todas las reglas de negocio validadas.\n\n";
 
-    return 0;
+
+
+    return todoCorrecto;
 }
+

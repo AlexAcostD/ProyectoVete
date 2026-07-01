@@ -50,43 +50,42 @@ int registrarMascota(
     const char dniProp[]
 )
 {
-    // Validar puntero
+
     if (nuevaMascota == NULL)
     {
         return 0;
     }
 
-    // Código duplicado
+
     if (existeMascota(codigo))
     {
         return 0;
     }
 
-    // Propietario inexistente
+   
     if (!existePropietario(dniProp))
     {
         return 0;
     }
 
-    // Sexo válido
     if (sexo != 'M' && sexo != 'H')
     {
         return 0;
     }
 
-    // Edad válida
+
     if (edad < 0)
     {
         return 0;
     }
 
-    // Peso válido
+  
     if (peso <= 0)
     {
         return 0;
     }
 
-    // Llenar estructura
+
     strcpy(nuevaMascota->codigo, codigo);
     strcpy(nuevaMascota->nombre, nombre);
     strcpy(nuevaMascota->especie, especie);
@@ -100,7 +99,6 @@ int registrarMascota(
     strcpy(nuevaMascota->fechaNacimiento, fechaNac);
     strcpy(nuevaMascota->dniPropietario, dniProp);
 
-    // Guardar archivo
     ofstream archivo(
         "mascotas.dat",
         ios::binary | ios::app
@@ -119,4 +117,38 @@ int registrarMascota(
     archivo.close();
 
     return 1;
+}
+
+void listarMascotas()
+{
+    ifstream archivo("mascotas.dat", ios::binary);
+
+    if (!archivo)
+    {
+        cout << "No existe el archivo de mascotas." << endl;
+        return;
+    }
+
+    Mascota mascota;
+
+    cout << "\n===== LISTA DE MASCOTAS =====\n" << endl;
+
+    while (archivo.read(
+        reinterpret_cast<char*>(&mascota),
+        sizeof(Mascota)))
+    {
+        cout << "Codigo: " << mascota.codigo << endl;
+        cout << "Nombre: " << mascota.nombre << endl;
+        cout << "Especie: " << mascota.especie << endl;
+        cout << "Raza: " << mascota.raza << endl;
+        cout << "Sexo: " << mascota.sexo << endl;
+        cout << "Edad: " << mascota.edad << endl;
+        cout << "Peso: " << mascota.peso << endl;
+        cout << "Color: " << mascota.color << endl;
+        cout << "Fecha de Nacimiento: " << mascota.fechaNacimiento << endl;
+        cout << "DNI del Propietario: " << mascota.dniPropietario << endl;
+        cout << "----------------------------------" << endl;
+    }
+
+    archivo.close();
 }
